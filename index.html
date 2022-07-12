@@ -5,14 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <style>
         img {
             box-shadow: 0 0 15px black;
             border-radius: 50%;
-            width: 180px;
-            height: 180px;
+            width: 160px;
+            height: 160px;
         }
         
         picture {
@@ -24,6 +25,14 @@
         img.disable {
             opacity: 0.3;
         }
+
+        .is-small {
+            width: 50px;
+        }
+
+        .is-large {
+            width: 200px;
+        }
     
     </style>
 </head>
@@ -31,18 +40,57 @@
     <h1>hello wolr!!</h1>
     <div id="app">
     </div>
-    <script>
+    <script type="text/babel">
         const $app = document.getElementById("app");
-        const h = React.createElement;
+        const useState = React.useState;
+        
+        const Avatar = ({id, name = "♦♠☺", size}) => {
+            const [enabled, setEnabled] = useState(true);
 
-        const Avatar = params => {
-            const src = `https://randomuser.me/api/portraits/men/${params.id}.jpg`;
-            return h('img', { src });
+            if(!id) 
+            return <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"/>
+            
+            const src = `https://randomuser.me/api/portraits/men/${id}.jpg`;
+            
+            let pictureClassName = "small";
+            if (size == "small") {
+                pictureClassName = "is-small";
+            }
+            else if (size == "large"){
+                pictureClassName = "is-large";
+            }
+
+            //const imgClassName = enabled ? "" : "disabled";
+
+            return (
+                <picture className={pictureClassName}>
+                    <img
+                        onClick={() => {
+                            setEnabled(!enabled);
+                            //alert("HOLI");
+                        }} 
+                        //className={imgClassName} 
+                        src={src}
+                        />
+                    <strong>{name}</strong>
+                </picture>
+            );
         };
 
+        Avatar.defaultProps = {
+            name : "☻"
+        }
+
         ReactDOM.render(
-            h('div', null, [h(Avatar, { id: 1 }), h(Avatar, { id: 2 })])
-            , $app);
+            <div>
+                <Avatar id={11} name="juan1" size="small"/>
+                <Avatar id={12} name="juan2"/>
+                <Avatar id={13} name="juan3" size="large"/>
+                <Avatar id={14} size="large"/>
+                <Avatar/>
+            </div>,
+            $app
+        );
 
         /*const avatar = params => {
             const src = `https://randomuser.me/api/portraits/men/${params.id}.jpg`;
